@@ -101,6 +101,7 @@ class TemplateParams extends \Seffeng\Sms\Clients\Aliyun\TemplateParams
 4、本地 http 请求错误：(cURL error 60: SSL certificate problem: unable to get local issuer certificate.)。
 
 4.1 下载 cacert.pem （[https://curl.haxx.se/docs/caextract.html](https://curl.haxx.se/docs/caextract.html)）；
+
 4.2 修改 php.ini 修改 curl.cainfo 文件路径（绝对路径）：
 
 ```
