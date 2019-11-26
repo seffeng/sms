@@ -1,0 +1,23 @@
+{
+    "name": "seffeng/sms",
+    "description": "PHP extension sms",
+    "keywords": ["PHP", "laravel", "seffeng", "sms"],
+    "license": "MIT",
+    "homepage": "https://github.com/seffeng/sms",
+    "authors": [
+        {
+            "name": "seffeng",
+            "email": "save.zxf@gmail.com",
+            "homepage": "https://github.com/seffeng"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Seffeng\\Sms\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
