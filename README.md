@@ -96,5 +96,15 @@ class TemplateParams extends \Seffeng\Sms\Clients\Aliyun\TemplateParams
 
 2、使用阿里云发送短信时若 $content 结构是阿里云格式时 $stdTemplateParams 无效（不需要此参数）；
 
-3、阿里云  AccessKeyId 和  AccessKeySecret 为[子账号 AccessKey](https://help.aliyun.com/document_detail/53045.html) 。
+3、阿里云  AccessKeyId 和  AccessKeySecret 为[子账号 AccessKey](https://help.aliyun.com/document_detail/53045.html) ；
+
+4、本地 http 请求错误：(cURL error 60: SSL certificate problem: unable to get local issuer certificate.)。
+
+4.1 下载 cacert.pem (https://curl.haxx.se/docs/caextract.html)；
+4.2 修改 php.ini 修改 curl.cainfo 文件路径（绝对路径）：
+
+```
+[curl]
+curl.cainfo = "/cacert.pem"
+```
 
