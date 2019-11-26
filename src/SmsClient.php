@@ -6,6 +6,7 @@
 namespace Seffeng\Sms;
 
 use Seffeng\Sms\Exceptions\SmsException;
+use Seffeng\Sms\Clients\Aliyun\TemplateParams;
 
 /**
  * 短信服务
@@ -15,20 +16,26 @@ use Seffeng\Sms\Exceptions\SmsException;
 class SmsClient
 {
     /**
-     *
+     * 阿里云AccessKeyId 或 腾讯云SecretId
      * @var string
      */
-    private $appId;
+    private $accessKeyId;
+
+    /**
+     * 阿里云AccessKeySecret 或 腾讯云SecretKey
+     * @var string
+     */
+    private $accessSecret;
+
+    /**
+     * 腾讯云SmsSdkAppid
+     * @var string
+     */
+    private $sdkAppId;
 
     /**
      *
-     * @var string
-     */
-    private $appSecret;
-
-    /**
-     *
-     * @var \Seffeng\Sms\Clients\AliyunClient|\Seffeng\Sms\Clients\QcloudClient
+     * @var \Seffeng\Sms\Clients\Aliyun\Client|\Seffeng\Sms\Clients\Qcloud\Client
      */
     private $client;
 
@@ -53,31 +60,40 @@ class SmsClient
     /**
      *
      * @author zxf
-     * @date    2019年11月21日
-     * @param  string $appId
-     * @param  string $appSecret
+     * @date    2019年11月25日
+     * @param string $accessKeyId
+     * @param string $accessSecret
+     * @param string $sdkAppId
      */
-    public function __construct(string $appId, string $appSecret)
+    public function __construct(string $accessKeyId, string $accessSecret, string $sdkAppId = '')
     {
-        $this->appId = $appId;
-        $this->appSecret = $appSecret;
+        $this->accessKeyId = $accessKeyId;
+        $this->accessSecret = $accessSecret;
+        $this->sdkAppId = $sdkAppId;
     }
 
     /**
      *
      * @author zxf
-     * @date    2019年11月21日
-     * @param string $client
+     * @date    2019年11月25日
+     * @param  string $client
+     * @param  TemplateParams $stdTemplateParams
+     * @throws SmsException
+     * @return \Seffeng\Sms\SmsClient
      */
-    public function setClient(string $client)
+    public function setClient(string $client, TemplateParams $stdTemplateParams = null)
     {
         $client = strtolower($client);
         if (!in_array($client, $this->allowClients)) {
-            throw new SmsException('非允许的短信服务商！');
+            throw new SmsException('暂不支持该短信服务商！');
         }
-        $class = '\\Seffeng\\Sms\\Clients\\'. ucfirst($client) .'Client';
+        $class = '\\Seffeng\\Sms\\Clients\\'. ucfirst($client) .'\\Client';
         $this->client = new $class;
-        $this->client->setClient($this->appId, $this->appSecret);
+
+        $this->client->setClient($this->accessKeyId, $this->accessSecret, $this->sdkAppId);
+        if ($client === 'aliyun' && is_object($stdTemplateParams)) {
+            $this->client->setStdTemplateParams($stdTemplateParams);
+        }
         return $this;
     }
 
@@ -85,17 +101,20 @@ class SmsClient
      *
      * @author zxf
      * @date    2019年11月21日
-     * @param  string $phone
+     * @param  string|array $phone
      * @param  string|array $content
      * @throws SmsException
      * @throws \Exception
      * @return boolean
      */
-    public function send(string $phone, $content)
+    public function send($phone, array $content)
     {
         try {
             if (is_null($this->client)) {
                 throw new SmsException('非允许的短信服务商！');
+            }
+            if (!$this->validPhone($phone)) {
+                throw new SmsException('手机号格式错误！');
             }
             return $this->client->setSignName($this->getSignName())->setTemplateCode($this->getTemplateCode())->send($phone, $content);
         } catch (SmsException $e) {
@@ -108,15 +127,22 @@ class SmsClient
     /**
      *
      * @author zxf
-     * @date    2019年11月21日
-     * @throws \Exception
+     * @date    2019年11月25日
+     * @param  string|array $phone
+     * @return boolean|number
      */
-    public function batchSend()
+    public function validPhone($phone)
     {
-        try {
-            echo 'batch send test';
-        } catch (\Exception $e) {
-            throw $e;
+        $regex = '/^1\d{10}$/';
+        if (is_array($phone)) {
+            foreach ($phone as $val) {
+                if (!preg_match($regex, $val)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return preg_match($regex, $phone);
         }
     }
 
