@@ -137,7 +137,7 @@ class Client
      */
     public function getIsHttps()
     {
-        return isset($_SERVER['HTTPS']) ? (strtolower($_SERVER['HTTPS']) === 'off' ? false : true) : false;
+        return isset($_SERVER['HTTPS']) ? ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) === 'off') ? false : true) : false;
     }
 
     /**
