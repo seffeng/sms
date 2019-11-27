@@ -132,12 +132,23 @@ class Client
     /**
      *
      * @author zxf
+     * @date    2019年11月27日
+     * @return boolean
+     */
+    public function getIsHttps()
+    {
+        return isset($_SERVER['HTTPS']) ? (strtolower($_SERVER['HTTPS']) === 'off' ? false : true) : false;
+    }
+
+    /**
+     *
+     * @author zxf
      * @date    2019年11月25日
      * @return string
      */
     public function getscheme()
     {
-        return $this->scheme;
+        return $this->getIsHttps() ? 'https://' : 'http://';
     }
 
     /**

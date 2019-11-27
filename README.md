@@ -46,6 +46,7 @@ class SiteController extends Controller
             $signName = '签名';         // 签名内容
             $tempCode = 'SMS_153055065'; // 腾讯云 templateId[1234] 或 阿里云 TemplateCode[SMS_153055065]
             $content = ['111111'];      // 腾讯云 ['111111'] 或 阿里云 ['code' => '111111']
+            $phone = '13800138000';     // 相同内容可批量发送['13800138000', '13800138001']
 
             // 因阿里云与腾讯云的内容参数结构不一致，参考 $content；可通过 TemplateParams 实现以腾讯云结构发送
             $stdTemplateParams = new TemplateParams();
@@ -53,7 +54,7 @@ class SiteController extends Controller
             $result = $client->setClient($name, $stdTemplateParams)
                         ->setSignName($signName)
                         ->setTemplateCode($tempCode)
-                        ->send('13800138000', $content);
+                        ->send($phone, $content);
 
             if ($result) {
                 echo '发送成功！';
