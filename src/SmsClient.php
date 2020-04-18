@@ -77,11 +77,11 @@ class SmsClient
      * @author zxf
      * @date    2019年11月25日
      * @param  string $client
-     * @param  TemplateParams $stdTemplateParams
+     * @param  TemplateParams $templateParamsModel
      * @throws SmsException
      * @return \Seffeng\Sms\SmsClient
      */
-    public function setClient(string $client, TemplateParams $stdTemplateParams = null)
+    public function setClient(string $client, TemplateParams $templateParamsModel = null)
     {
         $client = strtolower($client);
         if (!in_array($client, $this->allowClients)) {
@@ -91,8 +91,8 @@ class SmsClient
         $this->client = new $class;
 
         $this->client->setClient($this->accessKeyId, $this->accessSecret, $this->sdkAppId);
-        if ($client === 'aliyun' && is_object($stdTemplateParams)) {
-            $this->client->setStdTemplateParams($stdTemplateParams);
+        if ($client === 'aliyun' && !is_null($templateParamsModel)) {
+            $this->client->setTemplateParamsModel($templateParamsModel);
         }
         return $this;
     }

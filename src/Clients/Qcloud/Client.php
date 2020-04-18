@@ -8,6 +8,7 @@ namespace Seffeng\Sms\Clients\Qcloud;
 use Seffeng\Sms\Exceptions\SmsException;
 use GuzzleHttp\Client as HttpClient;
 use Seffeng\Sms\Helpers\ArrayHelper;
+use GuzzleHttp\Exception\RequestException;
 
 class Client
 {
@@ -144,8 +145,8 @@ class Client
 
             if ($error) {
                 $errorCode = ArrayHelper::getValue($error, 'Code');
-                $qcloudError = new Error($errorCode);
-                $message = $qcloudError->getName();
+                $errorItem = new Error($errorCode);
+                $message = $errorItem->getName();
                 $message === '' && $message = ArrayHelper::getValue($error, 'Message', '短信发送失败！') .'['. ArrayHelper::getValue($error, 'Code') .']';
                 throw new SmsException($message);
             }
@@ -156,9 +157,15 @@ class Client
                 return true;
             }
 
-            $qcloudError = new Error($errorCode);
-            $message = $qcloudError->getName();
+            $errorItem = new Error($errorCode);
+            $message = $errorItem->getName();
             $message === '' && $message = ArrayHelper::getValue($sendStatusSet, 'Message', '短信发送失败！') .'['. ArrayHelper::getValue($sendStatusSet, 'Code') .']';
+            throw new SmsException($message);
+        } catch (RequestException $e) {
+            $message = $e->getResponse()->getBody()->getContents();
+            if (!$message) {
+                $message = $e->getMessage();
+            }
             throw new SmsException($message);
         } catch (\Exception $e) {
             throw $e;

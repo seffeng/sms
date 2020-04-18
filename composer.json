@@ -23,5 +23,10 @@
             "Seffeng\\Sms\\": "src/"
         }
     },
+    "autoload-dev" : {
+        "psr-4" : {
+            "Seffeng\\Sms\\Tests\\" : "tests/"
+        }
+    },
     "minimum-stability": "stable"
 }

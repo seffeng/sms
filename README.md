@@ -49,9 +49,9 @@ class SiteController extends Controller
             $phone = '13800138000';     // 相同内容可批量发送['13800138000', '13800138001']
 
             // 因阿里云与腾讯云的内容参数结构不一致，参考 $content；可通过 TemplateParams 实现以腾讯云结构发送
-            $stdTemplateParams = new TemplateParams();
+            $templateParamsModel = new TemplateParams();
             $client = new SmsClient($appSecretId, $appSecretKey, $sdkAppId);
-            $result = $client->setClient($name, $stdTemplateParams)
+            $result = $client->setClient($name, $templateParamsModel)
                         ->setSignName($signName)
                         ->setTemplateCode($tempCode)
                         ->send($phone, $content);
@@ -95,7 +95,7 @@ class TemplateParams extends \Seffeng\Sms\Clients\Aliyun\TemplateParams
 
 1、使用阿里云发送短信时 $sdkAppId 无效（不需要此参数）；
 
-2、使用阿里云发送短信时若 $content 结构是阿里云格式时 $stdTemplateParams 无效（不需要此参数）；
+2、使用阿里云发送短信时若 $content 结构是阿里云格式时 $templateParamsModel 无效（不需要此参数）；
 
 3、阿里云  AccessKeyId 和  AccessKeySecret 为[子账号 AccessKey](https://help.aliyun.com/document_detail/53045.html) ；
 

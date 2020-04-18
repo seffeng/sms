@@ -8,6 +8,7 @@ namespace Seffeng\Sms\Clients\Aliyun;
 use Seffeng\Sms\Exceptions\SmsException;
 use GuzzleHttp\Client as HttpClient;
 use Seffeng\Sms\Helpers\ArrayHelper;
+use GuzzleHttp\Exception\RequestException;
 
 class Client
 {
@@ -111,7 +112,7 @@ class Client
      *
      * @var TemplateParams
      */
-    private $stdTemplateParams;
+    private $templateParamsModel;
 
     /**
      *
@@ -236,9 +237,15 @@ class Client
                 return true;
             }
 
-            $qcloudError = new Error($errorCode);
-            $message = $qcloudError->getName();
+            $errorItem = new Error($errorCode);
+            $message = $errorItem->getName();
             $message === '' && $message = ArrayHelper::getValue($content, 'Message', '短信发送失败！') .'['. ArrayHelper::getValue($content, 'Code') .']';
+            throw new SmsException($message);
+        } catch (RequestException $e) {
+            $message = $e->getResponse()->getBody()->getContents();
+            if (!$message) {
+                $message = $e->getMessage();
+            }
             throw new SmsException($message);
         } catch (\Exception $e) {
             throw $e;
@@ -276,10 +283,10 @@ class Client
      */
     public function getParams($phone, array $content)
     {
-        $stdTemplateParam = $this->getStdTemplateParams();
-        if ($this->getKeyIsInt($content) && is_object($stdTemplateParam)) {
-            $stdTemplateParam->setTemplateCode($this->getTemplateCode());
-            $keys = $stdTemplateParam->getName();
+        $templateParamsModel = $this->getTemplateParamsModel();
+        if ($this->getKeyIsInt($content) && $templateParamsModel instanceof TemplateParams) {
+            $templateParamsModel->setTemplateCode($this->getTemplateCode());
+            $keys = $templateParamsModel->getName();
             $keys && $content = array_combine($keys, $content);
         }
         is_array($phone) && $phone = implode(',', $phone);
@@ -615,11 +622,11 @@ class Client
      *
      * @author zxf
      * @date    2019年11月25日
-     * @param  TemplateParams $stdTemplateParams
+     * @param  TemplateParams $templateParamsModel
      */
-    public function setStdTemplateParams(TemplateParams $stdTemplateParams)
+    public function setTemplateParamsModel(TemplateParams $templateParamsModel)
     {
-        $this->stdTemplateParams = $stdTemplateParams;
+        $this->templateParamsModel = $templateParamsModel;
         return $this;
     }
 
@@ -629,8 +636,8 @@ class Client
      * @date    2019年11月25日
      * @return TemplateParams
      */
-    public function getStdTemplateParams()
+    public function getTemplateParamsModel()
     {
-        return $this->stdTemplateParams;
+        return $this->templateParamsModel;
     }
 }
