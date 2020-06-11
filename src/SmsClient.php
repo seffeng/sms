@@ -84,9 +84,8 @@ class SmsClient
     public function setClient(string $client, TemplateParams $templateParamsModel = null)
     {
         $client = strtolower($client);
-        if (!in_array($client, $this->allowClients)) {
-            throw new SmsException('暂不支持该短信服务商！');
-        }
+        $this->checkClient($client);
+
         $class = '\\Seffeng\\Sms\\Clients\\'. ucfirst($client) .'\\Client';
         $this->client = new $class;
 
@@ -95,6 +94,22 @@ class SmsClient
             $this->client->setTemplateParamsModel($templateParamsModel);
         }
         return $this;
+    }
+
+    /**
+     *
+     * @author zxf
+     * @date    2020年6月11日
+     * @param  string $client
+     * @throws SmsException
+     * @return boolean
+     */
+    public function checkClient(string $client)
+    {
+        if (!in_array($client, $this->allowClients)) {
+            throw new SmsException('暂不支持该短信服务商！['. $client .']');
+        }
+        return true;
     }
 
     /**
