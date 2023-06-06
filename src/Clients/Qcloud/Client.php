@@ -176,7 +176,7 @@ class Client
      *
      * @author zxf
      * @date    2019年11月25日
-     * @return string[]|number[]
+     * @return string[]|integer[]
      */
     public function getHeaders()
     {
@@ -433,7 +433,7 @@ class Client
      *
      * @author zxf
      * @date    2019年11月22日
-     * @return number
+     * @return integer
      */
     public function getTimestamp()
     {

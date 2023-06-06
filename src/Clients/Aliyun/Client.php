@@ -509,7 +509,7 @@ class Client
      *
      * @author zxf
      * @date    2019年11月22日
-     * @return number
+     * @return integer
      */
     public function getTimestamp()
     {

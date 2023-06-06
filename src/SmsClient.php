@@ -144,7 +144,7 @@ class SmsClient
      * @author zxf
      * @date    2019年11月25日
      * @param  string|array $phone
-     * @return boolean|number
+     * @return boolean|integer
      */
     public function validPhone($phone)
     {
