@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.1.3",
-        "guzzlehttp/guzzle": ">=6.4",
+        "guzzlehttp/guzzle": "^6.0|^7.0",
         "seffeng/arr-helper" : ">=0.1"
     },
     "require-dev": {

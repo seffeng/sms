@@ -104,7 +104,7 @@ class Client
 
     /**
      *
-     * @var HttpClient
+     * @var \GuzzleHttp\Client
      */
     private $client;
 
@@ -242,7 +242,7 @@ class Client
             $message === '' && $message = Arr::getValue($content, 'Message', '短信发送失败！') .'['. Arr::getValue($content, 'Code') .']';
             throw new SmsException($message);
         } catch (RequestException $e) {
-            $message = $e->getRequest()->getBody()->getContents();
+            $message = $e->getResponse()->getBody()->getContents();
             if (!$message) {
                 $message = $e->getMessage();
             }
