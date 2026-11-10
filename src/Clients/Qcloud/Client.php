@@ -121,12 +121,12 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月21日
+     * @date   2019年11月21日
      * @param  string|array $phone
      * @param  array $content
      * @throws SmsException
      * @throws \Exception
-     * @return boolean
+     * @return bool
      */
     public function send($phone, array $content)
     {
@@ -175,15 +175,15 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月25日
-     * @return string[]|integer[]
+     * @date   2019年11月25日
+     * @return array
      */
     public function getHeaders()
     {
         return [
             'Host'           => $this->getHost(),
             'X-TC-Action'    => 'SendSms',
-            'X-TC-Timestamp' => $this->getTimestamp(),
+            'X-TC-Timestamp' => (string) $this->getTimestamp(),
             'X-TC-Version'   => $this->getVersion(),
             'Content-Type'   => 'application/json',
             'Authorization'  => $this->getAuthorization(),
@@ -432,8 +432,8 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月22日
-     * @return integer
+     * @date   2019年11月22日
+     * @return int
      */
     public function getTimestamp()
     {

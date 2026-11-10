@@ -102,7 +102,7 @@ class SmsClient
      * @date    2020年6月11日
      * @param  string $client
      * @throws SmsException
-     * @return boolean
+     * @return bool
      */
     public function checkClient(string $client)
     {
@@ -115,12 +115,12 @@ class SmsClient
     /**
      *
      * @author zxf
-     * @date    2019年11月21日
+     * @date   2019年11月21日
      * @param  string|array $phone
      * @param  string|array $content
      * @throws SmsException
      * @throws \Exception
-     * @return boolean
+     * @return bool
      */
     public function send($phone, array $content)
     {
@@ -142,9 +142,9 @@ class SmsClient
     /**
      *
      * @author zxf
-     * @date    2019年11月25日
+     * @date   2019年11月25日
      * @param  string|array $phone
-     * @return boolean|integer
+     * @return bool|int
      */
     public function validPhone($phone)
     {

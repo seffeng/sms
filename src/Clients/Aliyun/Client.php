@@ -133,8 +133,8 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月27日
-     * @return boolean
+     * @date   2019年11月27日
+     * @return bool
      */
     public function getIsHttps()
     {
@@ -214,11 +214,11 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月21日
+     * @date   2019年11月21日
      * @param  string|array $phone
      * @param  array $content
      * @throws SmsException
-     * @return boolean
+     * @return bool
      */
     public function send($phone, array $content)
     {
@@ -301,9 +301,9 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月25日
-     * @param array $array
-     * @return boolean
+     * @date   2019年11月25日
+     * @param  array $array
+     * @return bool
      */
     public function getKeyIsInt(array $array)
     {
@@ -508,8 +508,8 @@ class Client
     /**
      *
      * @author zxf
-     * @date    2019年11月22日
-     * @return integer
+     * @date   2019年11月22日
+     * @return int
      */
     public function getTimestamp()
     {
