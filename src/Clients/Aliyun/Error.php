@@ -5,7 +5,7 @@
  */
 namespace Seffeng\Sms\Clients\Aliyun;
 
-use Seffeng\Sms\Helpers\ArrayHelper;
+use Seffeng\ArrHelper\Arr;
 
 class Error
 {
@@ -45,7 +45,7 @@ class Error
      */
     public function getName()
     {
-        return ArrayHelper::getValue(self::fetchNameItems(), $this->getValue(), '');
+        return Arr::getValue(self::fetchNameItems(), $this->getValue(), '');
     }
 
     /**

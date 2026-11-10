@@ -7,7 +7,7 @@ namespace Seffeng\Sms\Clients\Qcloud;
 
 use Seffeng\Sms\Exceptions\SmsException;
 use GuzzleHttp\Client as HttpClient;
-use Seffeng\Sms\Helpers\ArrayHelper;
+use Seffeng\ArrHelper\Arr;
 use GuzzleHttp\Exception\RequestException;
 
 class Client
@@ -140,29 +140,29 @@ class Client
             ])->getBody()->getContents();
 
             $content = json_decode($request, true);
-            $response = ArrayHelper::getValue($content, 'Response');
-            $error = ArrayHelper::getValue($response, 'Error');
+            $response = Arr::getValue($content, 'Response');
+            $error = Arr::getValue($response, 'Error');
 
             if ($error) {
-                $errorCode = ArrayHelper::getValue($error, 'Code');
+                $errorCode = Arr::getValue($error, 'Code');
                 $errorItem = new Error($errorCode);
                 $message = $errorItem->getName();
-                $message === '' && $message = ArrayHelper::getValue($error, 'Message', '短信发送失败！') .'['. ArrayHelper::getValue($error, 'Code') .']';
+                $message === '' && $message = Arr::getValue($error, 'Message', '短信发送失败！') .'['. Arr::getValue($error, 'Code') .']';
                 throw new SmsException($message);
             }
 
-            $sendStatusSet = ArrayHelper::getValue($response, 'SendStatusSet.0');
-            $errorCode = ArrayHelper::getValue($sendStatusSet, 'Code');
+            $sendStatusSet = Arr::getValue($response, 'SendStatusSet.0');
+            $errorCode = Arr::getValue($sendStatusSet, 'Code');
             if ($errorCode && $errorCode === 'Ok') {
                 return true;
             }
 
             $errorItem = new Error($errorCode);
             $message = $errorItem->getName();
-            $message === '' && $message = ArrayHelper::getValue($sendStatusSet, 'Message', '短信发送失败！') .'['. ArrayHelper::getValue($sendStatusSet, 'Code') .']';
+            $message === '' && $message = Arr::getValue($sendStatusSet, 'Message', '短信发送失败！') .'['. Arr::getValue($sendStatusSet, 'Code') .']';
             throw new SmsException($message);
         } catch (RequestException $e) {
-            $message = $e->getResponse()->getBody()->getContents();
+            $message = $e->getRequest()->getBody()->getContents();
             if (!$message) {
                 $message = $e->getMessage();
             }
@@ -221,7 +221,7 @@ class Client
      *
      * @author zxf
      * @date    2019年11月22日
-     * @param string $appId
+     * @param string $sdkAppId
      * @return Client
      */
     public function setSdkAppId(string $sdkAppId)
@@ -267,7 +267,7 @@ class Client
      *
      * @author zxf
      * @date    2019年11月22日
-     * @param string $appSecret
+     * @param string $secretId
      * @return Client
      */
     public function setSecretId(string $secretId)

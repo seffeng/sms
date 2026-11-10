@@ -21,8 +21,6 @@ $ composer require seffeng/sms
 │          Error.php                腾讯云错误
 ├─Exceptions
 │      SmsException.php             异常基类
-└─Helpers
-       ArrayHelper.php              数组帮助类
 ```
 
 ### 示例
@@ -109,4 +107,3 @@ class TemplateParams extends \Seffeng\Sms\Clients\Aliyun\TemplateParams
 [curl]
 curl.cainfo = "/cacert.pem"
 ```
-

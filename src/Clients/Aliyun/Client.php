@@ -7,7 +7,7 @@ namespace Seffeng\Sms\Clients\Aliyun;
 
 use Seffeng\Sms\Exceptions\SmsException;
 use GuzzleHttp\Client as HttpClient;
-use Seffeng\Sms\Helpers\ArrayHelper;
+use Seffeng\ArrHelper\Arr;
 use GuzzleHttp\Exception\RequestException;
 
 class Client
@@ -119,11 +119,11 @@ class Client
      * @author zxf
      * @date    2019年11月21日
      * @param string $accessKeyId
-     * @param string $accessKeySecret
+     * @param string $accessSecret
      * @param string $sdkAppId  无效参数
      * @return Client
      */
-    public function setClient(string $accessKeyId, string $accessSecret, string $sdkAppId = null)
+    public function setClient(string $accessKeyId, string $accessSecret, ?string $sdkAppId = null)
     {
         $this->setAccessKeyId($accessKeyId)->setAccessSecret($accessSecret);
         $this->client = new HttpClient(['base_uri' => $this->getscheme() . $this->getHost()]);
@@ -231,7 +231,7 @@ class Client
 
             $request = $this->client->get('/', ['query' => $query])->getBody()->getContents();
             $content = json_decode($request, true);
-            $errorCode = ArrayHelper::getValue($content, 'Code');
+            $errorCode = Arr::getValue($content, 'Code');
 
             if ($errorCode && $errorCode === 'OK') {
                 return true;
@@ -239,10 +239,10 @@ class Client
 
             $errorItem = new Error($errorCode);
             $message = $errorItem->getName();
-            $message === '' && $message = ArrayHelper::getValue($content, 'Message', '短信发送失败！') .'['. ArrayHelper::getValue($content, 'Code') .']';
+            $message === '' && $message = Arr::getValue($content, 'Message', '短信发送失败！') .'['. Arr::getValue($content, 'Code') .']';
             throw new SmsException($message);
         } catch (RequestException $e) {
-            $message = $e->getResponse()->getBody()->getContents();
+            $message = $e->getRequest()->getBody()->getContents();
             if (!$message) {
                 $message = $e->getMessage();
             }
@@ -547,7 +547,6 @@ class Client
      *
      * @author zxf
      * @date    2019年11月25日
-     * @param  string $signatureNonce
      * @return Client
      */
     private function setSignatureNonce()

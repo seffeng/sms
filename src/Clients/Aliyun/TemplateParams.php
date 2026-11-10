@@ -5,7 +5,7 @@
  */
 namespace Seffeng\Sms\Clients\Aliyun;
 
-use Seffeng\Sms\Helpers\ArrayHelper;
+use Seffeng\ArrHelper\Arr;
 
 class TemplateParams
 {
@@ -55,7 +55,7 @@ class TemplateParams
      */
     public function getName()
     {
-        return ArrayHelper::getValue(static::fetchNameItems(), $this->getValue(), []);
+        return Arr::getValue(static::fetchNameItems(), $this->getValue(), []);
     }
 
     /**
